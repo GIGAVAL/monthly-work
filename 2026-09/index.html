@@ -1,1 +1,72 @@
-LOAD_FROM_FILE:/workspace/monthly-work/2026-09/index.html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>September 2026 · Valerie work plan</title>
+<style>
+:root{--bg:#0b1220;--panel:#121a2b;--line:#243047;--text:#e8eefc;--muted:#93a0b8;--open:#f59e0b;--closed:#22c55e;--accent:#60a5fa;--chip:#1a2744}
+*{box-sizing:border-box}body{margin:0;font-family:ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;background:radial-gradient(1100px 500px at 15% -10%,#1a2744 0%,var(--bg) 55%);color:var(--text);padding:32px 20px 64px}
+.wrap{max-width:980px;margin:0 auto}h1{font-size:28px;letter-spacing:-.02em;margin:0 0 6px}.sub{color:var(--muted);margin:0 0 24px;line-height:1.5}
+.nav a{color:var(--accent);text-decoration:none;margin-right:14px;font-size:14px}
+.stats{display:flex;gap:12px;flex-wrap:wrap;margin:0 0 22px}.stat{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:14px 16px;min-width:120px}.stat b{display:block;font-size:24px}.stat span{color:var(--muted);font-size:12px;text-transform:uppercase;letter-spacing:.06em}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:18px;margin:0 0 16px}.card h2{margin:0 0 12px;font-size:16px}
+.pr{display:grid;grid-template-columns:72px 1fr;gap:8px 12px;padding:10px 0;border-top:1px solid var(--line)}.pr:first-of-type{border-top:none}
+.badge{font-size:11px;font-weight:700;border-radius:999px;padding:3px 8px;display:inline-block}.badge.open{background:color-mix(in oklab,var(--open) 22%,transparent);color:var(--open)}.badge.closed{background:color-mix(in oklab,var(--closed) 22%,transparent);color:var(--closed)}
+.meta{color:var(--muted);font-size:12px;margin-top:4px}a.title{color:var(--text);text-decoration:none;font-weight:600}a.title:hover{color:var(--accent)}
+.plan{margin:0;padding-left:18px;color:var(--muted);line-height:1.55}.plan li{margin:0 0 8px}.plan strong{color:var(--text)}
+.footer{color:var(--muted);font-size:12px;margin-top:28px}.chip{display:inline-block;background:var(--chip);border:1px solid var(--line);border-radius:999px;padding:2px 8px;font-size:11px;color:var(--muted);margin-right:6px}
+h2.section{margin:28px 0 12px;font-size:18px}#status{color:var(--muted);font-size:13px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <nav class="nav"><a href="../">← Months</a></nav>
+  <h1>September 2026 work plan</h1>
+  <p class="sub">Valerie Jimenez (<code>GIGAVAL</code>) — GitHub PRs across getstructured-ai. Monthly tab on what shipped.</p>
+  <div class="stats" id="stats"></div>
+  <section class="card">
+    <h2>Month plan · themes</h2>
+    <ul class="plan">
+      <li><strong>Dashboard / GTM</strong> — Hubs, Portfolio, kill-list, Larson dossiers (early September).</li>
+      <li><strong>Codes library</strong> — book titles, NY jurisdiction tooling, Florida packs (Municode, JEA, FDOT) cherry-picked to main.</li>
+      <li><strong>Prod readiness</strong> — code-browser 404 for books not yet synced; DB allowlist / onboarding docs.</li>
+      <li><strong>Late September</strong> — LDG PA UCC 2015 pack + rebuild-tree-from-outline tooling (staging).</li>
+      <li><strong>Standing rule</strong> — Valerie-only cherry-picks to production; no multi-author staging→prod promotes.</li>
+    </ul>
+  </section>
+  <section class="card"><h2>Still open</h2><div id="open"></div></section>
+  <h2 class="section">By week</h2><div id="weeks"></div>
+  <h2 class="section">By theme</h2><div id="themes"></div>
+  <p class="footer">Source: GitHub <code>author:GIGAVAL created:2026-09-01..2026-09-30</code>. Data: <a href="data.json" style="color:var(--accent)">data.json</a>.</p>
+  <p id="status">Loading PRs…</p>
+</div>
+<script>
+function weekLabel(d){const day=+d.slice(8,10);if(day<=7)return'Week 1 · Sep 1–7';if(day<=14)return'Week 2 · Sep 8–14';if(day<=21)return'Week 3 · Sep 15–21';return'Week 4 · Sep 22–30'}
+function esc(s){return String(s).replace(/[&<>"']/g,c=>({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[c]))}
+function row(r){const open=r.state==='open';const closed=r.closed_at?` · closed ${esc(r.closed_at)}`:'';
+return `<div class="pr"><div><span class="badge ${open?'open':'closed'}">${open?'OPEN':'CLOSED'}</span></div>
+<div><a class="title" href="${esc(r.html_url)}" target="_blank" rel="noopener">#${r.number} — ${esc(r.title)}</a>
+<div class="meta"><span class="chip">${esc(r.repo)}</span> opened ${esc(r.created_at)}${closed}</div></div></div>`}
+function group(list,keyFn){const m={};for(const r of list){const k=keyFn(r);(m[k]=m[k]||[]).push(r)}return m}
+fetch('data.json').then(r=>r.json()).then(data=>{
+  const prs=data.prs, s=data.stats;
+  document.getElementById('stats').innerHTML=`
+    <div class="stat"><b>${s.total}</b><span>PRs opened</span></div>
+    <div class="stat"><b>${s.closed}</b><span>Closed</span></div>
+    <div class="stat"><b>${s.open}</b><span>Still open</span></div>
+    <div class="stat"><b>${s.repos.length}</b><span>Repos</span></div>`;
+  const open=prs.filter(p=>p.state==='open');
+  document.getElementById('open').innerHTML=open.length?open.map(row).join(''):'<p class="sub">None open.</p>';
+  const weeks=group(prs,p=>weekLabel(p.created_at));
+  const weekOrder=['Week 1 · Sep 1–7','Week 2 · Sep 8–14','Week 3 · Sep 15–21','Week 4 · Sep 22–30'];
+  document.getElementById('weeks').innerHTML=weekOrder.filter(w=>weeks[w]).map(w=>
+    `<section class="card"><h2>${esc(w)} <span class="chip">${weeks[w].length} PRs</span></h2>${weeks[w].map(row).join('')}</section>`).join('');
+  const themes=group(prs,p=>p.theme);
+  document.getElementById('themes').innerHTML=Object.keys(themes).sort().map(t=>
+    `<section class="card"><h2>${esc(t)} <span class="chip">${themes[t].length}</span></h2>${themes[t].map(row).join('')}</section>`).join('');
+  document.getElementById('status').textContent='';
+}).catch(e=>{document.getElementById('status').textContent='Failed to load data.json: '+e});
+</script>
+</body>
+</html>
