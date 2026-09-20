@@ -38,7 +38,7 @@ h2.section{margin:28px 0 12px;font-size:18px}#status{color:var(--muted);font-siz
   <section class="card"><h2>Still open</h2><div id="open"></div></section>
   <h2 class="section">By week</h2><div id="weeks"></div>
   <h2 class="section">By theme</h2><div id="themes"></div>
-  <p class="footer">Source: GitHub <code>author:GIGAVAL created:2026-09-01..2026-09-30</code>. Data: <a href="data.json" style="color:var(--accent)">data.json</a>.</p>
+  <p class="footer">Source: GitHub <code>author:GIGAVAL created:2026-09-01..2026-09-30</code>.</p>
   <p id="status">Loading PRs…</p>
 </div>
 <script>
@@ -49,8 +49,10 @@ return `<div class="pr"><div><span class="badge ${open?'open':'closed'}">${open?
 <div><a class="title" href="${esc(r.html_url)}" target="_blank" rel="noopener">#${r.number} — ${esc(r.title)}</a>
 <div class="meta"><span class="chip">${esc(r.repo)}</span> opened ${esc(r.created_at)}${closed}</div></div></div>`}
 function group(list,keyFn){const m={};for(const r of list){const k=keyFn(r);(m[k]=m[k]||[]).push(r)}return m}
-fetch('data.json').then(r=>r.json()).then(data=>{
-  const prs=data.prs, s=data.stats;
+async function load(){
+  const meta=await (await fetch('meta.json')).json();
+  const parts=await Promise.all([...Array(meta.chunks)].map((_,i)=>fetch('prs-'+i+'.json').then(r=>r.json())));
+  const prs=parts.flat(), s=meta.stats;
   document.getElementById('stats').innerHTML=`
     <div class="stat"><b>${s.total}</b><span>PRs opened</span></div>
     <div class="stat"><b>${s.closed}</b><span>Closed</span></div>
@@ -66,7 +68,8 @@ fetch('data.json').then(r=>r.json()).then(data=>{
   document.getElementById('themes').innerHTML=Object.keys(themes).sort().map(t=>
     `<section class="card"><h2>${esc(t)} <span class="chip">${themes[t].length}</span></h2>${themes[t].map(row).join('')}</section>`).join('');
   document.getElementById('status').textContent='';
-}).catch(e=>{document.getElementById('status').textContent='Failed to load data.json: '+e});
+}
+load().catch(e=>{document.getElementById('status').textContent='Failed to load PR data: '+e});
 </script>
 </body>
 </html>
