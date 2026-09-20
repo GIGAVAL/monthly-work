@@ -5,49 +5,64 @@
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
 <title>Monthly work · Valerie</title>
 <style>
-:root {
-  --bg:#0b1220; --panel:#121a2b; --line:#243047; --text:#e8eefc; --muted:#93a0b8;
-  --open:#f59e0b; --closed:#22c55e; --accent:#60a5fa; --chip:#1a2744;
+:root{
+  --bg:#0b1220; --panel:#121a2b; --panel2:#182338; --line:#243047; --text:#e8eefc; --muted:#93a0b8;
+  --open:#f59e0b; --accent:#60a5fa; --chip:#1a2744;
 }
 *{box-sizing:border-box}
-body{margin:0;font-family:ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;
-background:radial-gradient(1100px 500px at 15% -10%,#1a2744 0%,var(--bg) 55%);color:var(--text);padding:32px 20px 64px}
-.wrap{max-width:980px;margin:0 auto}
-h1{font-size:28px;letter-spacing:-.02em;margin:0 0 6px}
-.sub{color:var(--muted);margin:0 0 24px;line-height:1.5}
-.stats{display:flex;gap:12px;flex-wrap:wrap;margin:0 0 22px}
-.stat{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:14px 16px;min-width:120px}
-.stat b{display:block;font-size:24px}
-.stat span{color:var(--muted);font-size:12px;text-transform:uppercase;letter-spacing:.06em}
-.card{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:18px 18px 8px;margin:0 0 16px}
-.card h2{margin:0 0 12px;font-size:16px}
-.pr{display:grid;grid-template-columns:72px 1fr;gap:8px 12px;padding:10px 0;border-top:1px solid var(--line);align-items:start}
-.pr:first-of-type{border-top:none}
-.badge{font-size:11px;font-weight:700;border-radius:999px;padding:3px 8px;display:inline-block;width:fit-content}
-.badge.open{background:color-mix(in oklab,var(--open) 22%,transparent);color:var(--open)}
-.badge.closed{background:color-mix(in oklab,var(--closed) 22%,transparent);color:var(--closed)}
-.meta{color:var(--muted);font-size:12px;margin-top:4px}
-a.title{color:var(--text);text-decoration:none;font-weight:600}
-a.title:hover{color:var(--accent)}
+body{margin:0;min-height:100vh;font-family:ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;
+background:radial-gradient(1100px 500px at 15% -10%,#1a2744 0%,var(--bg) 55%);color:var(--text);padding:28px 20px 40px}
+.wrap{max-width:1100px;margin:0 auto}
+header{margin:0 0 22px}
+h1{font-size:26px;letter-spacing:-.02em;margin:0}
+.sub{color:var(--muted);margin:6px 0 0;line-height:1.45;max-width:56ch;font-size:14px}
+.months{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:14px}
+.month{
+  position:relative;display:block;text-decoration:none;color:inherit;
+  background:linear-gradient(160deg,var(--panel2),var(--panel));
+  border:1px solid var(--line);border-radius:16px;padding:18px;
+  transition:transform .15s ease,border-color .15s ease,box-shadow .15s ease;
+  min-height:150px;overflow:hidden;
+}
+.month:hover,.month:focus-visible{
+  transform:translateY(-2px);border-color:color-mix(in oklab,var(--accent) 45%,var(--line));
+  box-shadow:0 12px 28px rgba(0,0,0,.28);outline:none;
+}
+.month .live{font-size:10px;font-weight:700;border-radius:999px;padding:3px 8px;display:inline-block;
+  background:color-mix(in oklab,var(--open) 22%,transparent);color:var(--open);letter-spacing:.04em}
+.month h2{margin:10px 0 6px;font-size:18px}
+.month .meta{color:var(--muted);font-size:12px;line-height:1.45}
+.month .hover{
+  position:absolute;inset:auto 0 0 0;padding:12px 18px 14px;
+  background:linear-gradient(180deg,transparent,rgba(11,18,32,.92) 35%);
+  display:flex;gap:8px;flex-wrap:wrap;opacity:0;transform:translateY(6px);
+  transition:opacity .15s ease,transform .15s ease;
+}
+.month:hover .hover,.month:focus-visible .hover{opacity:1;transform:translateY(0)}
+.chip{display:inline-block;background:var(--chip);border:1px solid var(--line);border-radius:999px;padding:2px 8px;font-size:11px;color:var(--muted)}
 .footer{color:var(--muted);font-size:12px;margin-top:28px}
-.chip{display:inline-block;background:var(--chip);border:1px solid var(--line);border-radius:999px;padding:2px 8px;font-size:11px;color:var(--muted);margin-right:6px}
 </style>
 </head>
 <body>
 <div class="wrap">
-  <h1>Monthly work log</h1>
-  <p class="sub">Valerie Jimenez — GitHub PR tracker by month. Open a month to see the work plan and every PR.</p>
-  <section class="card">
-    <h2>Months</h2>
-    <div class="pr">
-      <div><span class="badge open">LIVE</span></div>
-      <div>
-        <a class="title" href="2026-09/">September 2026</a>
-        <div class="meta">41 PRs · 38 closed · 3 open · repos: internal-dashboard, structured-fullstack, structured-landing</div>
+  <header>
+    <h1>Monthly work log</h1>
+    <p class="sub">Valerie Jimenez — browse month by month. Hover a card for a quick readout, click to open the workbench.</p>
+  </header>
+  <section class="months" aria-label="Months">
+    <a class="month" href="2026-09/">
+      <span class="live">LIVE</span>
+      <h2>September 2026</h2>
+      <div class="meta">41 PRs · 38 closed · 3 open<br/>Dashboard · Codes · Landing</div>
+      <div class="hover">
+        <span class="chip">internal-dashboard</span>
+        <span class="chip">structured-fullstack</span>
+        <span class="chip">structured-landing</span>
+        <span class="chip">Open workbench →</span>
       </div>
-    </div>
+    </a>
   </section>
-  <p class="footer">Hosted on GitHub Pages from <code>GIGAVAL/monthly-work</code>.</p>
+  <p class="footer">Hosted on GitHub Pages · <code>GIGAVAL/monthly-work</code></p>
 </div>
 </body>
 </html>
