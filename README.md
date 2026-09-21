@@ -5,6 +5,7 @@ Personal monthly work log for Valerie Jimenez (`GIGAVAL`): GitHub PRs + a short 
 ## Site
 
 - Home: `/`
+- August 2026: `/2026-08/`
 - September 2026: `/2026-09/`
 
 ## Refresh a month

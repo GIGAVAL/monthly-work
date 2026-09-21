@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>August 2026 · Valerie work plan</title>
+<style>
+:root{
+  --bg:#0b1220; --panel:#121a2b; --panel2:#182338; --line:#243047; --text:#e8eefc; --muted:#93a0b8;
+  --open:#f59e0b; --closed:#22c55e; --accent:#60a5fa; --chip:#1a2744;
+}
+*{box-sizing:border-box}
+html,body{height:100%}
+body{margin:0;font-family:ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;
+background:radial-gradient(1100px 480px at 12% -12%,#1a2744 0%,var(--bg) 55%);color:var(--text);
+display:flex;flex-direction:column;min-height:100vh}
+a{color:var(--accent)}
+.top{padding:16px 20px 0;max-width:1200px;width:100%;margin:0 auto}
+.crumb{font-size:13px;margin:0 0 10px}
+.crumb a{color:var(--accent);text-decoration:none}
+.head{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;flex-wrap:wrap;margin:0 0 14px}
+h1{font-size:22px;letter-spacing:-.02em;margin:0}
+.sub{color:var(--muted);font-size:13px;margin:4px 0 0;line-height:1.4}
+.stats{display:flex;gap:8px;flex-wrap:wrap}
+.stat{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:8px 12px;min-width:72px}
+.stat b{display:block;font-size:18px;line-height:1.1}
+.stat span{color:var(--muted);font-size:10px;text-transform:uppercase;letter-spacing:.05em}
+.tabs{display:flex;gap:6px;flex-wrap:wrap;padding:0 0 12px;border-bottom:1px solid var(--line)}
+.tab{appearance:none;border:1px solid var(--line);background:var(--panel);color:var(--muted);
+  border-radius:999px;padding:7px 14px;font:inherit;font-size:13px;font-weight:600;cursor:pointer;
+  transition:background .12s,color .12s,border-color .12s}
+.tab:hover{background:var(--panel2);color:var(--text);border-color:color-mix(in oklab,var(--accent) 35%,var(--line))}
+.tab.active,.tab:focus-visible{background:color-mix(in oklab,var(--accent) 18%,var(--panel));color:var(--text);
+  border-color:color-mix(in oklab,var(--accent) 50%,var(--line));outline:none}
+.work{flex:1;max-width:1200px;width:100%;margin:0 auto;padding:14px 20px 20px;display:flex;flex-direction:column;min-height:0}
+.filters{display:flex;gap:6px;flex-wrap:wrap;margin:0 0 12px;min-height:28px}
+.chip{appearance:none;border:1px solid var(--line);background:var(--chip);color:var(--muted);
+  border-radius:999px;padding:4px 10px;font:inherit;font-size:11px;cursor:pointer}
+.chip:hover,.chip.on{color:var(--text);border-color:color-mix(in oklab,var(--accent) 40%,var(--line));
+  background:color-mix(in oklab,var(--accent) 12%,var(--chip))}
+.panel{display:none;flex:1;min-height:0}
+.panel.on{display:flex;flex-direction:column;min-height:0}
+.plan-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:10px}
+.plan-card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:14px}
+.plan-card h3{margin:0 0 6px;font-size:13px}
+.plan-card p{margin:0;color:var(--muted);font-size:12px;line-height:1.45}
+.scroll{overflow:auto;flex:1;min-height:0;padding-right:2px;max-height:calc(100vh - 210px)}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:8px;align-content:start}
+.pr{display:grid;grid-template-columns:56px 1fr;gap:8px 10px;background:var(--panel);border:1px solid var(--line);
+  border-radius:12px;padding:10px 12px;transition:border-color .12s,background .12s}
+.pr:hover{border-color:color-mix(in oklab,var(--accent) 40%,var(--line));background:var(--panel2)}
+.badge{font-size:10px;font-weight:700;border-radius:999px;padding:3px 7px;display:inline-block;width:fit-content}
+.badge.open{background:color-mix(in oklab,var(--open) 22%,transparent);color:var(--open)}
+.badge.closed{background:color-mix(in oklab,var(--closed) 22%,transparent);color:var(--closed)}
+.title{color:var(--text);text-decoration:none;font-weight:600;font-size:13px;line-height:1.35;
+  display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.title:hover{color:var(--accent)}
+.meta{color:var(--muted);font-size:11px;margin-top:4px;display:flex;gap:6px;flex-wrap:wrap;align-items:center}
+.tag{display:inline-block;background:var(--chip);border:1px solid var(--line);border-radius:999px;padding:1px 7px}
+.empty{color:var(--muted);font-size:13px;padding:18px;background:var(--panel);border:1px dashed var(--line);border-radius:12px}
+.group-label{grid-column:1/-1;font-size:11px;color:var(--muted);font-weight:700;letter-spacing:.04em;
+  text-transform:uppercase;margin:4px 0 0;padding-top:2px}
+.status{color:var(--muted);font-size:12px;margin:8px 0 0}
+</style>
+</head>
+<body>
+<div class="top">
+  <p class="crumb"><a href="../">← Months</a></p>
+  <div class="head">
+    <div>
+      <h1>August 2026</h1>
+      <p class="sub">Workbench — first month (started mid-August). Hover the tabs to switch views; chips filter weeks or themes.</p>
+    </div>
+    <div class="stats" id="stats"></div>
+  </div>
+  <nav class="tabs" id="tabs" aria-label="Views">
+    <button type="button" class="tab active" data-view="plan">Plan</button>
+    <button type="button" class="tab" data-view="open">Open</button>
+    <button type="button" class="tab" data-view="weeks">Weeks</button>
+    <button type="button" class="tab" data-view="themes">Themes</button>
+  </nav>
+</div>
+<main class="work">
+  <div class="filters" id="filters" hidden></div>
+
+  <section class="panel on" id="view-plan" data-view="plan">
+    <div class="plan-grid">
+      <article class="plan-card"><h3>First month</h3><p>Started mid-August. Onboarding to structured-fullstack and internal-dashboard; first PRs on Aug 19.</p></article>
+      <article class="plan-card"><h3>Finding card (STR-548)</h3><p>Condensed the finding card action row into two tiers and promoted it to production.</p></article>
+      <article class="plan-card"><h3>Dashboard / Kill list</h3><p>Connection column, kill_list_connections migration, ENR rank, firm owners, 500/503 fixes.</p></article>
+      <article class="plan-card"><h3>Mesh</h3><p>Broker hydration says why it failed and retries transient 5xx (end of month).</p></article>
+    </div>
+  </section>
+
+  <section class="panel" id="view-open" data-view="open">
+    <div class="scroll"><div class="grid" id="open-grid"></div></div>
+  </section>
+
+  <section class="panel" id="view-weeks" data-view="weeks">
+    <div class="scroll"><div class="grid" id="weeks-grid"></div></div>
+  </section>
+
+  <section class="panel" id="view-themes" data-view="themes">
+    <div class="scroll"><div class="grid" id="themes-grid"></div></div>
+  </section>
+
+  <p class="status" id="status">Loading PRs…</p>
+</main>
+<script>
+const WEEK_ORDER=['Week 3 · Aug 15–21','Week 4 · Aug 22–31'];
+function weekLabel(d){const day=+d.slice(8,10);if(day<=21)return WEEK_ORDER[0];return WEEK_ORDER[1]}
+function esc(s){return String(s).replace(/[&<>"']/g,c=>({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[c]))}
+function card(r){
+  const open=r.state==='open';
+  const closed=r.closed_at?` · closed ${esc(r.closed_at)}`:'';
+  return `<article class="pr">
+    <div><span class="badge ${open?'open':'closed'}">${open?'OPEN':'CLOSED'}</span></div>
+    <div>
+      <a class="title" href="${esc(r.html_url)}" target="_blank" rel="noopener">#${r.number} — ${esc(r.title)}</a>
+      <div class="meta"><span class="tag">${esc(r.repo)}</span><span>opened ${esc(r.created_at)}${closed}</span></div>
+    </div>
+  </article>`}
+function group(list,keyFn){const m={};for(const r of list){const k=keyFn(r);(m[k]=m[k]||[]).push(r)}return m}
+
+let prs=[], activeView='plan', activeFilter='all';
+
+function setView(view){
+  activeView=view;
+  document.querySelectorAll('.tab').forEach(t=>t.classList.toggle('active',t.dataset.view===view));
+  document.querySelectorAll('.panel').forEach(p=>p.classList.toggle('on',p.dataset.view===view));
+  const filters=document.getElementById('filters');
+  if(view==='weeks'||view==='themes'){
+    filters.hidden=false;
+    renderFilters();
+  }else{
+    filters.hidden=true;
+    filters.innerHTML='';
+    activeFilter='all';
+  }
+  renderLists();
+}
+
+function renderFilters(){
+  const filters=document.getElementById('filters');
+  let keys;
+  if(activeView==='weeks'){
+    keys=['all',...WEEK_ORDER.filter(w=>prs.some(p=>weekLabel(p.created_at)===w))];
+  }else{
+    keys=['all',...Object.keys(group(prs,p=>p.theme)).sort()];
+  }
+  if(!keys.includes(activeFilter)) activeFilter='all';
+  filters.innerHTML=keys.map(k=>{
+    const label=k==='all'?(activeView==='weeks'?'All weeks':'All themes'):k;
+    const count=k==='all'?prs.length:(activeView==='weeks'?prs.filter(p=>weekLabel(p.created_at)===k).length:prs.filter(p=>p.theme===k).length);
+    return `<button type="button" class="chip ${activeFilter===k?'on':''}" data-filter="${esc(k)}">${esc(label)} · ${count}</button>`;
+  }).join('');
+}
+
+function filtered(){
+  if(activeFilter==='all') return prs;
+  if(activeView==='weeks') return prs.filter(p=>weekLabel(p.created_at)===activeFilter);
+  if(activeView==='themes') return prs.filter(p=>p.theme===activeFilter);
+  return prs;
+}
+
+function renderGrouped(targetId, keyFn, order){
+  const list=filtered();
+  const g=group(list,keyFn);
+  const keys=order?order.filter(k=>g[k]):Object.keys(g).sort();
+  const el=document.getElementById(targetId);
+  if(!keys.length){el.innerHTML='<div class="empty">Nothing in this view.</div>';return}
+  el.innerHTML=keys.map(k=>`<div class="group-label">${esc(k)} · ${g[k].length}</div>${g[k].map(card).join('')}`).join('');
+}
+
+function renderLists(){
+  if(activeView==='open'){
+    const open=prs.filter(p=>p.state==='open');
+    document.getElementById('open-grid').innerHTML=open.length?open.map(card).join(''):'<div class="empty">None open.</div>';
+    return;
+  }
+  if(activeView==='weeks'){
+    if(activeFilter==='all') renderGrouped('weeks-grid',p=>weekLabel(p.created_at),WEEK_ORDER);
+    else document.getElementById('weeks-grid').innerHTML=filtered().map(card).join('')||'<div class="empty">Nothing in this week.</div>';
+  }
+  if(activeView==='themes'){
+    if(activeFilter==='all') renderGrouped('themes-grid',p=>p.theme);
+    else document.getElementById('themes-grid').innerHTML=filtered().map(card).join('')||'<div class="empty">Nothing in this theme.</div>';
+  }
+}
+
+document.getElementById('tabs').addEventListener('mouseover',e=>{
+  const btn=e.target.closest('.tab');
+  if(btn && btn.dataset.view!==activeView) setView(btn.dataset.view);
+});
+document.getElementById('tabs').addEventListener('click',e=>{
+  const btn=e.target.closest('.tab');
+  if(btn) setView(btn.dataset.view);
+});
+document.getElementById('filters').addEventListener('mouseover',e=>{
+  const chip=e.target.closest('.chip');
+  if(!chip) return;
+  const next=chip.dataset.filter;
+  if(next!==activeFilter){activeFilter=next;renderFilters();renderLists()}
+});
+document.getElementById('filters').addEventListener('click',e=>{
+  const chip=e.target.closest('.chip');
+  if(!chip) return;
+  activeFilter=chip.dataset.filter;
+  renderFilters();
+  renderLists();
+});
+
+async function load(){
+  const meta=await (await fetch('meta.json')).json();
+  const parts=await Promise.all([...Array(meta.chunks)].map((_,i)=>fetch('prs-'+i+'.json').then(r=>r.json())));
+  prs=parts.flat();
+  const s=meta.stats;
+  document.getElementById('stats').innerHTML=`
+    <div class="stat"><b>${s.total}</b><span>PRs</span></div>
+    <div class="stat"><b>${s.closed}</b><span>Closed</span></div>
+    <div class="stat"><b>${s.open}</b><span>Open</span></div>
+    <div class="stat"><b>${s.repos.length}</b><span>Repos</span></div>`;
+  document.getElementById('status').textContent='';
+  setView('plan');
+}
+load().catch(e=>{document.getElementById('status').textContent='Failed to load PR data: '+e});
+</script>
+</body>
+</html>
